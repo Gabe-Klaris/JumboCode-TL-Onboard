@@ -4,8 +4,7 @@ import { Movie } from '../../../types/movie';
 
 export async function generateStaticParams() {
   return Array.from({ length: 10 }, (_  , i) => ({
-    i: i + 1,
-    page: i.toString(),
+    page: (i + 1).toString(), 
   }));
 }
 
@@ -16,9 +15,10 @@ async function getPage(page: string) {
 }
 
 
-export default async function movie_list ({ params }: { params: { page: string } }) {
+export default async function MovieList ({ params }: { params: Promise<{ page: string }> }) {
 
-    const data = await getPage(params.page);
+    const page = (await params).page;
+    const data = await getPage(page);
 
     return (
         <div>
@@ -34,10 +34,10 @@ export default async function movie_list ({ params }: { params: { page: string }
             ))}
         </div>
         <div className="flex justify-center mt-4">
-            {params.page !== '1' && <Link href={`/list/${parseInt(params.page) - 1}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
+            {page !== '1' && <Link href={`/list/${parseInt(page) - 1}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
                 Previous
             </Link>}
-            {params.page !== '10' && <Link href={`/list/${parseInt(params.page) + 1}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+            {page !== '10' && <Link href={`/list/${parseInt(page) + 1}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
                 Next
             </Link>}
         </div>

@@ -3,6 +3,21 @@ import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 import { MongoClient } from 'mongodb';
 
+interface ClerkWebhookEvent {
+  data: {
+    id: string;
+    object: 'user';
+    email_addresses?: { email_address: string }[];
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    // ...add more Clerk fields as needed
+  };
+  object: 'event';
+  type: string;
+}
+
+
 
 export async function POST(req: Request) {
   const payload = await req.json();
@@ -20,7 +35,7 @@ export async function POST(req: Request) {
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature
     }
-  );
+  ) as ClerkWebhookEvent;
 
   const { id } = evt.data;
 

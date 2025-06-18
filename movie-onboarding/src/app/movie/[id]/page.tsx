@@ -15,8 +15,9 @@ async function getMovie(id: string) {
   return res.json();
 }
 
-export default async function MoviePage({ params }: { params: { id: string } }) {
-  const movie = await getMovie(params.id);
+export default async function MoviePage({ params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
+  const movie = await getMovie(id);
   const { userId } = await auth();
   return (
       <div className="flex flex-row p-4">
@@ -28,8 +29,8 @@ export default async function MoviePage({ params }: { params: { id: string } }) 
             <p className="text-gray-700 text-md">{movie.description}</p>
           </div>
           <div className = "flex flex-row justify-between w-full mt-4">
-            {userId && <Seen movieId={params.id} />}
-            {userId && <Recommend movieId={params.id} />}
+            {userId && <Seen movieId={id} />}
+            {userId && <Recommend movieId={id} />}
           </div>
         </div>
       </div>
