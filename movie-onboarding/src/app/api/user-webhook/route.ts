@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
   const client = new MongoClient(process.env.MONGODB_URI!);
   await client.connect();
-  const db = client.db("TL-onboarding");
+  const db = client.db("tl-onboarding");
   const col = db.collection("users");
 
   await col.insertOne({
